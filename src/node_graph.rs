@@ -45,24 +45,14 @@ impl NodeGraph {
         })
     }
 
-    pub fn print_to_depth(&self, depth: u64) {
-        let mut path = vec![];
-        self.print_to_depth_(&mut path, 0, depth);
+    pub fn get_node(&self, id: i64) -> Option<&Node> {
+        self.index_to_node.get(&id)
     }
 
-    fn print_to_depth_(&self, path: &mut Vec<String>, node_index: i64, depth: u64) {
-        let node = &self.index_to_node[&node_index];
-
-        path.push(node.name.clone());
-
-        println!("{}: {} {}", path.join("/"), node.url, node.comment);
-
-        if depth > 0 && self.outgoing_edges.contains_key(&node_index) {
-            for next in self.outgoing_edges[&node_index].iter() {
-                self.print_to_depth_(path, *next, depth - 1);
-            }
-        }
-
-        path.pop();
+    pub fn get_adjacent_nodes(&self, id: i64) -> impl Iterator<Item = &i64> {
+        self.outgoing_edges
+            .get(&id)
+            .into_iter()
+            .flat_map(|v| v.iter())
     }
 }
