@@ -4,6 +4,7 @@ use eframe::NativeOptions;
 mod barn;
 mod bessie;
 mod farmer_john;
+mod schema;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

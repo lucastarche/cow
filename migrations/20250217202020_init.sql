@@ -19,7 +19,7 @@ CREATE TABLE problems
 CREATE TABLE entries
 (
     parent      INTEGER NOT NULL,
-    date        TEXT DEFAULT CURRENT_DATE,
+    date        TEXT NOT NULL DEFAULT CURRENT_DATE,
     description TEXT,
     code        TEXT,
     FOREIGN KEY (parent) REFERENCES problems(id)

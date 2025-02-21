@@ -2,10 +2,10 @@ use std::collections::HashMap;
 
 use tokio::sync::mpsc::{self, error::TryRecvError, UnboundedReceiver, UnboundedSender};
 
-use crate::barn::Barn;
+use crate::{barn::Barn, schema::folder::Folder};
 
 pub struct FarmerJohn {
-    folders: HashMap<i64, String>,
+    folders: HashMap<i64, Folder>,
     subfolders_of: HashMap<Option<i64>, Vec<i64>>,
 
     event_send: UnboundedSender<Event>,
