@@ -1,19 +1,20 @@
-use app::CowApp;
+use bessie::Bessie;
+use eframe::NativeOptions;
 
-mod app;
-mod node_graph;
+mod barn;
+mod bessie;
+mod farmer_john;
 
-#[tokio::main(flavor = "current_thread")]
+#[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenvy::dotenv()?;
 
-    let cow_app = CowApp::new().await?;
     if let Err(e) = eframe::run_native(
         "COW",
-        eframe::NativeOptions::default(),
-        Box::new(|_| Ok(Box::new(cow_app))),
+        NativeOptions::default(),
+        Box::new(|_| Ok(Box::new(Bessie::new()))),
     ) {
-        println!("{e:#?}");
+        println!("Error: {e:#?}");
     }
 
     Ok(())

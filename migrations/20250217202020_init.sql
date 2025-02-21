@@ -1,27 +1,34 @@
 PRAGMA foreign_keys=ON;
 
-CREATE TABLE nodes 
+CREATE TABLE folders
 (
-    id      INTEGER PRIMARY KEY,
-    name    TEXT,
-    url     TEXT,
-    comment TEXT
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    name         TEXT NOT NULL,
+    parent       INTEGER,
+    description  TEXT,
+    FOREIGN KEY (parent) REFERENCES folders(parent)
 );
 
-CREATE TABLE edges
+CREATE TABLE problems 
 (
-    source INTEGER NOT NULL,
-    dest   INTEGER NOT NULL,
-    FOREIGN KEY (source) REFERENCES nodes(id),
-    FOREIGN KEY (dest)   REFERENCES nodes(id),
-    UNIQUE (source, dest)
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    name         TEXT NOT NULL,
+    description  TEXT
 );
 
 CREATE TABLE entries
 (
-    parent  INTEGER NOT NULL DEFAULT 0,
-    date    TEXT DEFAULT CURRENT_DATE,
-    comment TEXT,
-    code    TEXT,
-    FOREIGN KEY (parent) REFERENCES nodes(id)
+    parent      INTEGER NOT NULL,
+    date        TEXT DEFAULT CURRENT_DATE,
+    description TEXT,
+    code        TEXT,
+    FOREIGN KEY (parent) REFERENCES problems(id)
+);
+
+CREATE TABLE problem_folders
+(
+    folder_id   INTEGER NOT NULL,
+    problem_id  INTEGER NOT NULL,
+    FOREIGN KEY (folder_id) REFERENCES folders(id),
+    FOREIGN KEY (problem_id) REFERENCES problems(id)
 );
