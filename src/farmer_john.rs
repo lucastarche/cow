@@ -35,8 +35,13 @@ impl FarmerJohn {
             let res = self.message_recv.try_recv();
 
             if let Ok(message) = res {
+                match message {
+                    Message::UpdateSubfolders { parent, subfolders } => {
+                        self.subfolders_of.insert(parent, subfolders);
+                    }
+                }
             } else if let Err(TryRecvError::Empty) = res {
-                return;
+                break;
             } else {
                 panic!("Channel was closed unexpectedly!");
             }
@@ -63,4 +68,9 @@ pub enum Event {
     RequestSubfolders { parent: Option<i64> },
 }
 
-pub enum Message {}
+pub enum Message {
+    UpdateSubfolders {
+        parent: Option<i64>,
+        subfolders: Vec<i64>,
+    },
+}

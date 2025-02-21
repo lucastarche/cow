@@ -6,7 +6,7 @@ CREATE TABLE folders
     name         TEXT NOT NULL,
     parent       INTEGER,
     description  TEXT,
-    FOREIGN KEY (parent) REFERENCES folders(parent)
+    FOREIGN KEY (parent) REFERENCES folders(id)
 );
 
 CREATE TABLE problems 
