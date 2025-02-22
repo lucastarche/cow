@@ -1,7 +1,7 @@
-#[derive(sqlx::FromRow)]
+#[derive(sqlx::FromRow, Default)]
 pub struct Entry {
-    parent: i64,
-    date: String,
-    description: String,
-    code: String,
+    pub parent: i64,
+    pub date: String,
+    pub description: String,
+    pub code: String,
 }

@@ -5,7 +5,7 @@ CREATE TABLE folders
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     name         TEXT NOT NULL,
     parent       INTEGER,
-    description  TEXT,
+    description  TEXT NOT NULL,
     FOREIGN KEY (parent) REFERENCES folders(id)
 );
 
@@ -13,15 +13,15 @@ CREATE TABLE problems
 (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     name         TEXT NOT NULL,
-    description  TEXT
+    description  TEXT NOT NULL
 );
 
 CREATE TABLE entries
 (
     parent      INTEGER NOT NULL,
     date        TEXT NOT NULL DEFAULT CURRENT_DATE,
-    description TEXT,
-    code        TEXT,
+    description TEXT NOT NULL,
+    code        TEXT NOT NULL,
     FOREIGN KEY (parent) REFERENCES problems(id)
 );
 

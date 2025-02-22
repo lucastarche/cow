@@ -19,7 +19,7 @@ impl FarmerJohn {
 
         tokio::spawn(async move {
             let mut barn = Barn::new(event_recv, message_send).await;
-            barn.start().await;
+            barn.start().await.expect("Barn should not crash");
         });
 
         FarmerJohn {
@@ -39,6 +39,9 @@ impl FarmerJohn {
                     Message::UpdateSubfolders { parent, subfolders } => {
                         self.subfolders_of.insert(parent, subfolders);
                     }
+                    Message::UpdateFolder(folder) => {
+                        self.folders.insert(folder.id, folder);
+                    }
                 }
             } else if let Err(TryRecvError::Empty) = res {
                 break;
@@ -48,13 +51,22 @@ impl FarmerJohn {
         }
     }
 
-    pub fn get_subfolders_of(&mut self, parent: Option<i64>) -> impl Iterator<Item = &i64> {
+    pub fn get_subfolders_of(&mut self, parent: Option<i64>) -> &Vec<i64> {
         if !self.subfolders_of.contains_key(&parent) {
             self.subfolders_of.insert(parent, vec![]);
             self.send_event(Event::RequestSubfolders { parent });
         }
 
-        self.subfolders_of.get(&parent).unwrap().iter()
+        self.subfolders_of.get(&parent).unwrap()
+    }
+
+    pub fn get_folder(&mut self, id: i64) -> &Folder {
+        if !self.folders.contains_key(&id) {
+            self.folders.insert(id, Default::default());
+            self.send_event(Event::RequestFolder { id });
+        }
+
+        self.folders.get(&id).unwrap()
     }
 
     fn send_event(&mut self, event: Event) {
@@ -66,6 +78,7 @@ impl FarmerJohn {
 
 pub enum Event {
     RequestSubfolders { parent: Option<i64> },
+    RequestFolder { id: i64 },
 }
 
 pub enum Message {
@@ -73,4 +86,5 @@ pub enum Message {
         parent: Option<i64>,
         subfolders: Vec<i64>,
     },
+    UpdateFolder(Folder),
 }

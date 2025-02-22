@@ -1,7 +1,7 @@
-#[derive(sqlx::FromRow)]
+#[derive(sqlx::FromRow, Default)]
 pub struct Folder {
-    id: i64,
-    name: String,
-    parent: Option<i64>,
-    description: String,
+    pub id: i64,
+    pub name: String,
+    pub parent: Option<i64>,
+    pub description: String,
 }

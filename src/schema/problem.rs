@@ -1,6 +1,6 @@
-#[derive(sqlx::FromRow)]
+#[derive(sqlx::FromRow, Default)]
 pub struct Problem {
-    id: i64,
-    name: String,
-    description: String,
+    pub id: i64,
+    pub name: String,
+    pub description: String,
 }
